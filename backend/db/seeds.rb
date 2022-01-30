@@ -8,16 +8,16 @@ Faker::Config.random = nil
 #User Seed
 def users_seed
     users_arr =[{
-        first_name: 'Test', 
-        last_name: 'User 1', 
-        email: 'test@email.com',
+        name: 'John', 
+        mobile: '9191919191', 
+        email: 'john@email.com',
         password_digest: @password_digest, 
         token: Faker::Alphanumeric.alphanumeric(number: 10, min_alpha: 3)
         },
         {
-            first_name: 'Test', 
-            last_name: 'User 2', 
-            email: 'admin@email.com',
+            name: 'Peter', 
+            mobile: '8181818181', 
+            email: 'peter@email.com',
             password_digest: @password_digest, 
             token: Faker::Alphanumeric.alphanumeric(number: 10, min_alpha: 3)
         }]
