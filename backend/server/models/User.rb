@@ -4,17 +4,13 @@ require_relative '../helper/basic_helper'
 class User < Sequel::Model
 	plugin :secure_password
 
-	one_to_many		:cart_items,
-					:key	=> :user_id,
-					:class  => :UserCart
+	one_to_many		:expenses,
+					:key	=> :created_by_id,
+					:class  => :Expense
 
 	def validate
 		super
-		validates_unique(:email, :message=>'already exists'){ |ds| ds.where(:deleted_at => nil) }
-	end
-
-	def name
-		return self.first_name + ' ' + self.last_name 
+		validates_unique(:email,:mobile, :message=>'already exists'){ |ds| ds.where(:deleted_at => nil) }
 	end
 
 	def self.verify data
@@ -41,20 +37,11 @@ class User < Sequel::Model
 		user = self.where(token: login_token).first
 		raise "User Logged in another device.." unless user
 
-		cart_count = user.cart_items_dataset.sum(:count)
+		owe_amount = user.expenses_dataset.where(:paid => false).sum(:amount)
 		{
 			name: user.name,
 			email: user.email,
-			cart_count: cart_count || 0
-		}
-	end
-
-	def self.first_user data
-		user = self.first
-		{
-			first_name: user.first_name,
-			last_name: user.last_name,
-			email: user.email
+			owe_amount: owe_amount || 0
 		}
 	end
 end

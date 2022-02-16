@@ -1,0 +1,14 @@
+.navbar-menu {
+    display: flex;
+    justify-content: space-between;
+}
+.navbar-icon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.cart-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
