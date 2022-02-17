@@ -6,17 +6,14 @@ import SignUp from "screens/SignUp";
 import Admin from "screens/Admin";
 
 function App() {
-  const role = localStorage.getItem("role");
+  // const role = localStorage.getItem("role");
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
-        {role === "c" ? (
-            <Route path="/dashboard" element={<Dashboard />} />
-        ) : (
-            <Route path="/admin" element={<Admin />} />
-        )}
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </BrowserRouter>
   );
