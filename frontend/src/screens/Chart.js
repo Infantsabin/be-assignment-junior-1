@@ -54,7 +54,7 @@ export default function Chart() {
                 ...theme.typography.body1,
               }}
             >
-              Expenses ( &#8377;)
+              Expenses ( &#8377; )
             </Label>
           </YAxis>
           <Line
