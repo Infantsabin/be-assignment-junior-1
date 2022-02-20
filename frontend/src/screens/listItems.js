@@ -13,29 +13,29 @@ export default function MenuItems() {
 
   return (
   <React.Fragment>
-    <ListItemButton>
+    <ListItemButton onClick={() => navigate("/dashboard")}>
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
-      <ListItemText primary="Dashboard" onClick={() => navigate("/dashboard")}/>
+      <ListItemText primary="Dashboard" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton onClick={() => navigate("/my-expenses")}>
       <ListItemIcon>
         <Person />
       </ListItemIcon>
-      <ListItemText primary="My Expenses" onClick={() => navigate("/my-expenses")} />
+      <ListItemText primary="My Expenses" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton onClick={() => navigate("/sharing-expenses")} >
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
-      <ListItemText primary="Sharing Expenses" onClick={() => navigate("/sharing-expenses")} />
+      <ListItemText primary="Sharing Expenses" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton onClick={() => navigate("/friends-expenses")}>
       <ListItemIcon>
         <PersonSearchIcon />
       </ListItemIcon>
-      <ListItemText primary="Friends Expenses" onClick={() => navigate("/friends-expenses")}/>
+      <ListItemText primary="Friends Expenses" />
     </ListItemButton>
   </React.Fragment>
   )

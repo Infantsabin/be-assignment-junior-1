@@ -7,11 +7,11 @@ import Container from '@mui/material/Container';
 import AddExpensesForm from '../components/AddExpensesButton';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import Dashboard from '../components/Dashboard'
+import SharingExpense from '../components/SharingExpense'
 
 const mdTheme = createTheme();
 
-function DashboardContent() {
+function SharingExpensesContent() {
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -31,7 +31,7 @@ function DashboardContent() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Dashboard />
+            <SharingExpense />
             <AddExpensesForm />
             </Container>
             <Footer sx={{ pt: 4 }} />
@@ -41,6 +41,6 @@ function DashboardContent() {
   );
 }
 
-export default function DashboardScreen() {
-  return <DashboardContent />;
+export default function SharingExpensesScreen() {
+  return <SharingExpensesContent />;
 }
