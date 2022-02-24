@@ -48,6 +48,8 @@ export default function SignIn() {
           progress: undefined,
         });
         localStorage.setItem("token", response.data.values.token);
+        localStorage.setItem("user_id", response.data.values.id);
+        localStorage.setItem("name", response.data.values.name);
         navigate("/dashboard");
       })
       .catch((error) => {

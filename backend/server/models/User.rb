@@ -49,7 +49,7 @@ class User < Sequel::Model
 		cur_user_id = self.id
 		owe_amount = total_balance = due_amount = nil
 		
-		recent_sharings = self.expenses_dataset.collect do |expense|
+		recent_sharings = self.expenses_dataset.order(Sequel.desc(Sequel[:expenses][:created_at])).limit(5).collect do |expense|
 			shared_with = expense.user_expenses_dataset.where{user_id !~ expense[:paid_by_id]}.collect do |user_expense|
 				user_expense.user.name
 			end.join(',')

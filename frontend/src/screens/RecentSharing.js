@@ -35,7 +35,7 @@ export default function RecentSharing(props) {
               <TableCell>{row.paid_by}</TableCell>
               <TableCell>{row.created_by}</TableCell>
               <TableCell>{row.shared_with}</TableCell>
-              <TableCell align="right">{`$${row.total}`}</TableCell>
+              <TableCell align="right">&#8377;{`${row.total}`}</TableCell>
             </TableRow>
           ))}
         </TableBody>

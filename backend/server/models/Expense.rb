@@ -43,8 +43,14 @@ class Expense < Sequel::Model
 	end
 
 	def self.get_user_expenses cur_user
-		Expense.where(:created_by_id => cur_user.id).collect do |expense|
+		cur_user_id = cur_user.id
+
+		Expense.where(:created_by_id => cur_user_id).collect do |expense|
+			owe_amount = 0.00
+			owe_amount = expense.user_expenses_dataset.where{user_id !~ cur_user_id}.sum(:amount).to_f if expense[:paid_by_id] == cur_user_id
+			user_expense = expense.user_expenses_dataset.where(:user_id => cur_user_id).first
 			{
+				id: expense[:id],
 				name: expense[:name],
 				description: expense[:description],
 				date: expense[:date],
@@ -52,7 +58,10 @@ class Expense < Sequel::Model
 				created_by_id: expense[:created_by_id],
 				paid_by_id: expense[:paid_by_id],
 				created_by: expense.creator.name,
-				paid_by: expense.paid_by.name
+				paid_by: expense.paid_by.name,
+				amount: user_expense[:amount].to_f,
+				owe_amount: owe_amount,
+				paid: user_expense[:paid],
 			}
 		end		
 	end
