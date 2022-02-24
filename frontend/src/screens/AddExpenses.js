@@ -83,7 +83,8 @@ export default function AddExpensesForm(props) {
       )
       .then((response) => {
         console.log(response.status);
-        navigate('/dashboard')
+        window.location = '/dashboard'
+        // navigate('/dashboard')
       })
       .catch((error) => {
         console.error("There was an error!", error);
