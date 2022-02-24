@@ -28,6 +28,7 @@ function DashboardContent() {
           params: { token: token },
         })
         .then((response) => {
+          console.log(response.data)
           setName(response.data.values.name);
         })
         .catch((error) => {
@@ -40,7 +41,7 @@ function DashboardContent() {
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <Header name='Dashboard' />
+        <Header name='Dashboard' userName={name} />
         <Box
           component="main"
           sx={{

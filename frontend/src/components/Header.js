@@ -122,7 +122,9 @@ export default function Header(props) {
               </Badge>
                       </IconButton>
             <IconButton color="inherit">
-              <Fingerprint />
+              <LightTooltip title={props.userName}>
+                <Fingerprint />
+              </LightTooltip>
             </IconButton>
             <IconButton color="inherit">
               <LightTooltip title="logout" onClick={handleLogout}>

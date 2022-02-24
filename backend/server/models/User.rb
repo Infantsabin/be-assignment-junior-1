@@ -8,6 +8,10 @@ class User < Sequel::Model
 					:key	=> :created_by_id,
 					:class  => :Expense
 
+	one_to_many		:paid_expenses,
+					:key	=> :paid_by_id,
+					:class  => :Expense
+
 	def validate
 		super
 		validates_unique(:email,:mobile, :message=>'already exists'){ |ds| ds.where(:deleted_at => nil) }
@@ -33,11 +37,33 @@ class User < Sequel::Model
 
 	def dashboard_details
 
-		owe_amount = user.expenses_dataset.where(:paid => false).sum(:amount)
+		cur_user_id = self.id
+		owe_amount = total_balance = due_amount = nil
+		
+		recent_sharings = self.expenses_dataset.collect do |expense|
+			{
+				name: expense[:name],
+				description: expense[:description],
+				date: expense[:date],
+				total: expense[:total].to_f,
+				created_by_id: expense[:created_by_id],
+				paid_by_id: expense[:paid_by_id],
+				created_by: expense.creator.name,
+				paid_by: expense.paid_by.name,
+			}
+		end 
+
+		owe_amount = UserExpense.where(:user_id => cur_user_id, :paid => false).sum(:amount).to_f
+		due_amount = UserExpense.where{user_id !~ cur_user_id}.where(:paid => false).sum(:amount).to_f
+
+		total_balance = self.paid_expenses_dataset.sum(:total).to_f + (owe_amount - due_amount)
 		{
-			name: user.name,
-			email: user.email,
-			owe_amount: owe_amount || 0
+			name: self.name,
+			email: self.email,
+			recent_sharings: recent_sharings,
+			owe_amount: owe_amount || 0.00,
+			due_amount: due_amount || 0.00,
+			total_balance: total_balance || 0.00,
 		}
 	end
 end
