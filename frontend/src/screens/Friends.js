@@ -14,8 +14,6 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FriendExpenseLists from '../screens/FriendsExpenseLists';
-import Typography from '@mui/material/Typography';
-import Title from '../screens/Title';
 import axios from "axios";
 
 const mdTheme = createTheme();

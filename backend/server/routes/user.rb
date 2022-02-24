@@ -32,7 +32,17 @@ App.route('api/auth') do |r|
 
      r.on 'users-list' do 
         r.get do 
-            ret = User.get_all_users @user
+            ret = User.get_users_query @user
+            {
+                values: ret,
+                success: true
+            }
+        end
+    end
+
+     r.on 'all-users' do 
+        r.get do 
+            ret = User.get_all_users
             {
                 values: ret,
                 success: true

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTheme } from '@mui/material/styles';
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -6,13 +7,14 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateTimePicker from '@mui/lab/DateTimePicker';
+import DatePicker from '@mui/lab/DatePicker';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Box from '@mui/material/Box';
+import axios from "axios";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -25,19 +27,6 @@ const MenuProps = {
   },
 };
 
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
-
 function getStyles(name, personName, theme) {
   return {
     fontWeight:
@@ -49,18 +38,18 @@ function getStyles(name, personName, theme) {
 
 export default function AddExpensesForm(props) {
   const theme = useTheme();
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("user_id");
+  const navigate = useNavigate();
+  const [paidUserList, setPaidUserList] = useState([]);
+  const [userList, setUserList] = useState([]);
   const [value, setValue] = React.useState(null);
   const [paidby, setPaidby] = React.useState('');
   const [personName, setPersonName] = React.useState([]);
   const [form, setForm] = useState({
     name: '',
-    lastName: '',
-    addressLin1: '',
-    addressLin2: '',
-    city: '',
-    state: '',
-    postCode: '',
-    country: ''
+    description: '',
+    amount: '',
   })
 
   const handleMultiSelectChange = (event) => {
@@ -78,11 +67,51 @@ export default function AddExpensesForm(props) {
     
   const handleSubmit = (event) => {
     event.preventDefault();
+
+     axios
+      .post(`${process.env.REACT_APP_BASE_API_URL}/api/expense`,
+        {
+          name: form.name,
+          users: personName.map(s=>s.id),
+          description: form.description,
+          total: form.amount,
+          paid_by_id: paidby,
+          created_by_id: userId,
+          date: value,
+          token: token,
+        }
+      )
+      .then((response) => {
+        console.log(response.status);
+        navigate('/dashboard')
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
   };
 
   const handleChange = (event) => {
     setPaidby(event.target.value);
+    setUserList(userList.filter((item) => item.id !== event.target.value));
   };
+
+    useEffect(() => {
+    if (!token) {
+      navigate("/");
+    } else {
+      axios
+        .get(`${process.env.REACT_APP_BASE_API_URL}/api/auth/all-users`, {
+          params: { token: token },
+        })
+        .then((response) => {
+          setUserList(response.data.values);
+          setPaidUserList(response.data.values);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
+    }
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <React.Fragment>
@@ -92,8 +121,9 @@ export default function AddExpensesForm(props) {
         <Grid container spacing={4}>
           <Grid item xs={12}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DateTimePicker
+            <DatePicker
                 label="DateTime"
+                name="date"
                 value={value}
                 onChange={(newValue) => {
                 setValue(newValue);
@@ -137,34 +167,22 @@ export default function AddExpensesForm(props) {
               onChange={handleFormState}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12}>
             <InputLabel id="demo-simple-select-label">Paid By</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={paidby}
+              disabled={paidby !== ''}
               label="Paid by"
               fullWidth
               variant="standard"
               onChange={handleChange}
             >
-              <MenuItem value={10}>Robin</MenuItem>
-              <MenuItem value={20}>Sabin</MenuItem>
-              <MenuItem value={30}>Jovit</MenuItem>
+              {paidUserList.map((row) => (
+                <MenuItem key={row.id} value={row.id}>{row.name}</MenuItem>
+                ))}
             </Select>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-                disabled
-                id="outlined-read-only-input"
-                label="Lent/Borrowed"
-                fullWidth
-                variant="standard"
-                defaultValue="Lent"
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
         </Grid>
         <Grid item xs={12}>
           <InputLabel id="demo-multiple-chip-label">People who has to pay</InputLabel>
@@ -180,26 +198,27 @@ export default function AddExpensesForm(props) {
             renderValue={(selected) => (
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                 {selected.map((value) => (
-                  <Chip key={value} label={value} />
+                  <Chip key={value.id} label={value.name} />
                 ))}
               </Box>
             )}
             MenuProps={MenuProps}
           >
-            {names.map((name) => (
+            {userList.map((row) => (
               <MenuItem
-                key={name}
-                value={name}
-                style={getStyles(name, personName, theme)}
+                key={row.id}
+                value={row}
+                style={getStyles(row.name, personName, theme)}
               >
-                {name}
+                {row.name}
               </MenuItem>
             ))}
           </Select>
         </Grid>
         </Grid>
         <Button
-              type="submit"
+        type="submit"
+        onClick={handleSubmit}
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}

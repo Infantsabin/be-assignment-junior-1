@@ -35,8 +35,17 @@ class User < Sequel::Model
 		User.create(data)
 	end
 
-	def self.get_all_users cur_user
+	def self.get_users_query cur_user
 		User.exclude(:id => cur_user.id).all.collect do |user|
+			{
+				id: user.id,
+				name: user.name,
+			}
+		end 
+	end
+
+	def self.get_all_users
+		User.all.collect do |user|
 			{
 				id: user.id,
 				name: user.name,
@@ -59,7 +68,7 @@ class User < Sequel::Model
 				name: expense[:name],
 				description: expense[:description],
 				date: expense[:date],
-				total: expense[:total].to_f,
+				total: expense[:total].to_f.round(2),
 				created_by_id: expense[:created_by_id],
 				paid_by_id: expense[:paid_by_id],
 				created_by: expense.creator.name,
@@ -68,10 +77,10 @@ class User < Sequel::Model
 			}
 		end 
 
-		owe_amount = UserExpense.where(:user_id => cur_user_id, :paid => false).sum(:amount).to_f
-		due_amount = UserExpense.where{user_id !~ cur_user_id}.where(:paid => false).sum(:amount).to_f
+		owe_amount = UserExpense.where(:user_id => cur_user_id, :paid => false).sum(:amount).to_f.round(2)
+		due_amount = UserExpense.where{user_id !~ cur_user_id}.where(:paid => false).sum(:amount).to_f.round(2)
 
-		# self.paid_expenses_dataset.sum(:total).to_f 
+		# self.paid_expenses_dataset.sum(:total).to_f.round(2) 
 		total_balance = (due_amount - owe_amount)
 		{
 			name: self.name,
