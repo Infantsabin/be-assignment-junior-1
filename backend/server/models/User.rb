@@ -35,8 +35,8 @@ class User < Sequel::Model
 		User.create(data)
 	end
 
-	def self.get_all_users
-		User.all.collect do |user|
+	def self.get_all_users cur_user
+		User.exclude(:id => cur_user.id).all.collect do |user|
 			{
 				id: user.id,
 				name: user.name,

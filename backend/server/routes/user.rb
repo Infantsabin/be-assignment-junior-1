@@ -26,9 +26,13 @@ App.route('api/auth') do |r|
             }
         end
     end
+    
+    @user = User.where(token: @token).first
+    raise "Invalid Login Token.." unless @user
+
      r.on 'users-list' do 
         r.get do 
-            ret = User.get_all_users
+            ret = User.get_all_users @user
             {
                 values: ret,
                 success: true

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -15,19 +16,53 @@ import Select from '@mui/material/Select';
 import FriendExpenseLists from '../screens/FriendsExpenseLists';
 import Typography from '@mui/material/Typography';
 import Title from '../screens/Title';
+import axios from "axios";
 
 const mdTheme = createTheme();
 
 function FriendExpensesContent() {
   const [paidby, setPaidby] = useState('');
+  const navigate = useNavigate();
+  const [userList, setUserList] = useState([]);
+  const [friendExpenses, setFriendExpenses] = useState([]);
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("user_id");
+  const userName = localStorage.getItem("name");
   const handleChange = (event) => {
     setPaidby(event.target.value);
+    axios
+        .get(`${process.env.REACT_APP_BASE_API_URL}/api/expense/${event.target.value}`, {
+          params: { token: token },
+        })
+        .then((response) => {
+          setFriendExpenses(response.data.values);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
   };
+
+  useEffect(() => {
+    if (!token || !userId) {
+      navigate("/");
+    } else {
+      axios
+        .get(`${process.env.REACT_APP_BASE_API_URL}/api/auth/users-list`, {
+          params: { token: token },
+        })
+        .then((response) => {
+          setUserList(response.data.values);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
+    }
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <Navbar name='Friends Expenses' />
+        <Navbar name='Friends Expenses' userName={userName} />
         <Box
           component="main"
           sx={{
@@ -44,7 +79,7 @@ function FriendExpensesContent() {
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
               {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
+              <Grid item xs={12}>
                 <Paper
                   sx={{
                     p: 5,
@@ -62,37 +97,18 @@ function FriendExpensesContent() {
               label="Paid by"
               fullWidth
               variant="standard"
-              onChange={handleChange}
-            >
-              <MenuItem value={10}>Robin</MenuItem>
-              <MenuItem value={20}>Sabin</MenuItem>
-              <MenuItem value={30}>Jovit</MenuItem>
+              onChange={handleChange}>       
+              {userList.map((row) => (
+                <MenuItem key={row.id} value={row.id}>{row.name}</MenuItem>
+                ))}
             </Select>
         </Grid>
             </Paper>
               </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'row',
-                    height: 150,
-                  }}
-            >
-              <Grid>
-              <Title>Due to Give you</Title>
-              <Typography component="h4" variant="h4">
-                &#8377; 3,024.00
-                </Typography>
-                </Grid>
-                </Paper>
-              </Grid>
               {/* Recent Orders */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <FriendExpenseLists />
+                  <FriendExpenseLists friendExpenses={friendExpenses}/>
                 </Paper>
               </Grid>
             </Grid>
