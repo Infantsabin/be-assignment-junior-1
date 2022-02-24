@@ -56,7 +56,8 @@ class User < Sequel::Model
 		owe_amount = UserExpense.where(:user_id => cur_user_id, :paid => false).sum(:amount).to_f
 		due_amount = UserExpense.where{user_id !~ cur_user_id}.where(:paid => false).sum(:amount).to_f
 
-		total_balance = self.paid_expenses_dataset.sum(:total).to_f + (owe_amount - due_amount)
+		# self.paid_expenses_dataset.sum(:total).to_f 
+		total_balance = (due_amount - owe_amount)
 		{
 			name: self.name,
 			email: self.email,
