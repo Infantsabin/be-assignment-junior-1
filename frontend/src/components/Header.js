@@ -61,7 +61,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function Header() {
+export default function Header(props) {
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
         setOpen(!open);
@@ -94,7 +94,7 @@ export default function Header() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              ''
+              {props.name}
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">

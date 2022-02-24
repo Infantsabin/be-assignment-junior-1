@@ -16,7 +16,7 @@ function FriendExpensesContent() {
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <Header />
+        <Header name='Friends Expenses' />
         <Box
           component="main"
           sx={{
