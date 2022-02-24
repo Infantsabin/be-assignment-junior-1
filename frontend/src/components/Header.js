@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from "react-router-dom";
 import { styled} from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -13,6 +14,7 @@ import Fingerprint from "@mui/icons-material/Fingerprint";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Toolbar from '@mui/material/Toolbar';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import Menu from '../screens/listItems';
 
 const drawerWidth = 240;
@@ -61,12 +63,30 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
+const LightTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: theme.palette.common.white,
+      color: "rgba(0, 0, 0, 0.87)",
+      boxShadow: theme.shadows[1],
+      fontSize: 11,
+    },
+  }));
+
 export default function Header(props) {
+    const navigate = useNavigate();
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
         setOpen(!open);
     };
-
+  
+    const handleLogout = (event) => {
+      event.preventDefault();
+      localStorage.clear();
+      navigate("/");
+    };
+  
     return (
         <>
         <AppBar position="absolute" open={open}>
@@ -105,7 +125,9 @@ export default function Header(props) {
               <Fingerprint />
             </IconButton>
             <IconButton color="inherit">
-              <LogoutIcon />
+              <LightTooltip title="logout" onClick={handleLogout}>
+                <LogoutIcon />
+            </LightTooltip>
             </IconButton>
           </Toolbar>
         </AppBar>

@@ -31,11 +31,7 @@ class User < Sequel::Model
 		User.create(data)
 	end
 
-	def self.details login_token
-		raise "Invalid Login token..." unless login_token
-
-		user = self.where(token: login_token).first
-		raise "User Logged in another device.." unless user
+	def dashboard_details
 
 		owe_amount = user.expenses_dataset.where(:paid => false).sum(:amount)
 		{
