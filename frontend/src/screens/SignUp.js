@@ -34,8 +34,8 @@ export default function SignUp() {
 
     axios
       .post(`${process.env.REACT_APP_BASE_API_URL}/api/auth/user/create`, {
-        first_name: data.get("name"),
-        last_name: data.get("mobile"),
+        name: data.get("name"),
+        mobile: data.get("mobile"),
         email: data.get("email"),
         password_digest: data.get("password"),
       })

@@ -14,7 +14,7 @@ class User < Sequel::Model
 	end
 
 	def self.verify data
-		user = User.where(email: data[:email]).first
+		user = User.where(email: data[:email]).or(mobile: data[:email]).first
 		raise "Invalid User" unless user
 
 		decrypted_password = Helper.decrypt_password(user.password_digest)
