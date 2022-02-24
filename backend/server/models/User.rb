@@ -50,6 +50,10 @@ class User < Sequel::Model
 		owe_amount = total_balance = due_amount = nil
 		
 		recent_sharings = self.expenses_dataset.collect do |expense|
+			shared_with = expense.user_expenses_dataset.where{user_id !~ expense[:paid_by_id]}.collect do |user_expense|
+				user_expense.user.name
+			end.join(',')
+
 			{
 				id: expense[:id],
 				name: expense[:name],
@@ -60,6 +64,7 @@ class User < Sequel::Model
 				paid_by_id: expense[:paid_by_id],
 				created_by: expense.creator.name,
 				paid_by: expense.paid_by.name,
+				shared_with: shared_with
 			}
 		end 
 

@@ -1,35 +1,69 @@
-import React from "react";
+import * as React from 'react';
 import { useNavigate } from "react-router-dom";
-import Toolbar from "@mui/material/Toolbar";
+import { styled} from '@mui/material/styles';
+import MuiDrawer from '@mui/material/Drawer';
+import MuiAppBar from '@mui/material/AppBar';
+import List from '@mui/material/List';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Badge from '@mui/material/Badge';
+import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from "@mui/icons-material/Logout";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import Typography from "@mui/material/Typography";
-import AppBar from "@mui/material/AppBar";
 import Fingerprint from "@mui/icons-material/Fingerprint";
-import IconButton from "@mui/material/IconButton";
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import Toolbar from '@mui/material/Toolbar';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
-import Badge from "@mui/material/Badge";
-import { styled } from "@mui/material/styles";
-import "asserts/css/Dashboard.css";
+import Menu from '../screens/listItems';
 
-function Navbar(props) {
-    const navigate = useNavigate();
-    
-  let isCart = (props.count !== undefined)
-    
-  const handleLogout = (event) => {
-    event.preventDefault();
-    localStorage.clear();
-    navigate("/");
-  };
-  const StyledBadge = styled(Badge)(({ theme }) => ({
-    "& .MuiBadge-badge": {
-      border: `2px solid ${theme.palette.background.paper}`,
-      padding: "0 4px",
+const drawerWidth = 240;
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(['width', 'margin'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
+
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
+    '& .MuiDrawer-paper': {
+      position: 'relative',
+      whiteSpace: 'nowrap',
+      width: drawerWidth,
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      boxSizing: 'border-box',
+      ...(!open && {
+        overflowX: 'hidden',
+        transition: theme.transitions.create('width', {
+          easing: theme.transitions.easing.sharp,
+          duration: theme.transitions.duration.leavingScreen,
+        }),
+        width: theme.spacing(7),
+        [theme.breakpoints.up('sm')]: {
+          width: theme.spacing(9),
+        },
+      }),
     },
-  }));
+  }),
+);
 
-  const LightTooltip = styled(({ className, ...props }) => (
+const LightTooltip = styled(({ className, ...props }) => (
     <Tooltip {...props} classes={{ popper: className }} />
   ))(({ theme }) => ({
     [`& .${tooltipClasses.tooltip}`]: {
@@ -39,44 +73,84 @@ function Navbar(props) {
       fontSize: 11,
     },
   }));
-  return (
-    <AppBar position="fixed">
-      <div>
-        <Toolbar className="navbar-menu">
-          <div>
+
+export default function Navbar(props) {
+    const navigate = useNavigate();
+    const [open, setOpen] = React.useState(true);
+    const toggleDrawer = () => {
+        setOpen(!open);
+    };
+  
+    const handleLogout = (event) => {
+      event.preventDefault();
+      localStorage.clear();
+      navigate("/");
+    };
+  
+    return (
+        <>
+        <AppBar position="absolute" open={open}>
+          <Toolbar
+            sx={{
+              pr: '24px', // keep right padding when drawer closed
+            }}
+          >
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={toggleDrawer}
+              sx={{
+                marginRight: '36px',
+                ...(open && { display: 'none' }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
             <Typography
-              variant="h5"
+              component="h1"
+              variant="h6"
               color="inherit"
               noWrap
-              onClick={() => navigate("/dashboard")}
+              sx={{ flexGrow: 1 }}
             >
-              Roomie
+              {props.name}
             </Typography>
-          </div>
-          <div className="navbar-icon">
-            <LightTooltip title={props.name}>
-              <Fingerprint sx={{ mr: 2 }} />
+            <IconButton color="inherit">
+              <Badge badgeContent={4} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+                      </IconButton>
+            <IconButton color="inherit">
+              <LightTooltip title={props.userName}>
+                <Fingerprint />
+              </LightTooltip>
+            </IconButton>
+            <IconButton color="inherit">
+              <LightTooltip title="logout" onClick={handleLogout}>
+                <LogoutIcon />
             </LightTooltip>
-            {isCart && (
-              <>
-                <IconButton
-                  aria-label="cart"
-                  style={{ marginRight: "14px" }}
-                  onClick={() => navigate("/cart")}
-                >
-                  <StyledBadge badgeContent={props.count} color="success">
-                    <ShoppingCartIcon style={{ color: "#fff" }} />
-                  </StyledBadge>
-                </IconButton>
-              </>
-            )}
-            <LightTooltip title="logout" onClick={handleLogout}>
-              <LogoutIcon sx={{ mr: 2 }} />
-            </LightTooltip>
-          </div>
-        </Toolbar>
-      </div>
-    </AppBar>
-  );
-}
-export default Navbar;
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <Drawer variant="permanent" open={open}>
+          <Toolbar
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              px: [1],
+            }}
+          >
+            <IconButton onClick={toggleDrawer}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </Toolbar>
+          <Divider />
+          <List component="nav">
+            <Menu />
+          </List>
+        </Drawer>
+        </>
+    );
+  }

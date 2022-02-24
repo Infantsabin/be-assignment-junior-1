@@ -68,7 +68,6 @@ export default function AddExpensesForm(props) {
       target: { value },
     } = event;
     setPersonName(
-      // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
     );
   };
@@ -131,7 +130,7 @@ export default function AddExpensesForm(props) {
               required
               id="amount"
               name="amount"
-              label="Amount"
+              label="Amount( ₹ )"
               fullWidth
               autoComplete="given-amount"
               variant="standard"

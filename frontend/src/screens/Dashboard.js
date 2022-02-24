@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import AddExpensesForm from '../components/AddExpensesButton';
-import Header from '../components/Header';
+import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Dashboard from '../components/Dashboard';
 import axios from "axios";
@@ -31,7 +31,6 @@ function DashboardContent() {
           params: { token: token },
         })
         .then((response) => {
-          console.log(response.data)
           setName(response.data.values.name);
           setOwe(response.data.values.due_amount);
           setDue(response.data.values.owe_amount);
@@ -48,7 +47,7 @@ function DashboardContent() {
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <Header name='Dashboard' userName={name} />
+        <Navbar name='Dashboard' userName={name} />
         <Box
           component="main"
           sx={{

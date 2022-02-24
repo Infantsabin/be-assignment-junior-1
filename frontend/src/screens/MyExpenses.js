@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import AddExpensesForm from '../components/AddExpensesButton';
-import Header from '../components/Header';
+import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import MyExpense from '../components/MyExpense'
 
@@ -16,7 +16,7 @@ function MyExpensesContent() {
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <Header name='My Expenses' />
+        <Navbar name='My Expenses' />
         <Box
           component="main"
           sx={{
