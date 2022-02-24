@@ -23,7 +23,7 @@ class UserExpense < Sequel::Model
 				paid_by: user_expense.expense.paid_by.name,
 				amount: user_expense[:amount].to_f,
 				paid: user_expense[:paid],
-			}
-		end		
+			} if user_expense.expense.paid_by_id != user_expense[:user_id]
+		end.compact	
 	end
 end
