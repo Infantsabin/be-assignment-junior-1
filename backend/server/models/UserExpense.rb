@@ -9,4 +9,21 @@ class UserExpense < Sequel::Model
 	many_to_one		:expense,
 					:key	=> :expense_id,
 					:class  => :Expense
+
+	def self.get_user_sharing_expenses cur_user
+		self.where(:user_id => cur_user.id).collect do |user_expense|
+			{
+				name: user_expense.expense.name,
+				description: user_expense.expense.description,
+				date: user_expense.expense.date,
+				total: user_expense.expense.total.to_f,
+				created_by_id: user_expense.expense.created_by_id,
+				paid_by_id: user_expense.expense.paid_by_id,
+				created_by: user_expense.expense.creator.name,
+				paid_by: user_expense.expense.paid_by.name,
+				amount: user_expense[:amount].to_f,
+				paid: user_expense[:paid],
+			}
+		end		
+	end
 end
