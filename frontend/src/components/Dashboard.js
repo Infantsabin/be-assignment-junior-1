@@ -2,10 +2,10 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Chart from '../screens/Chart';
-import Deposits from '../screens/Deposits';
+import Balance from '../screens/Balance';
 import RecentSharing from '../screens/RecentSharing';
 
-export default function Dashboard() {
+export default function Dashboard(props) {
     return (
         <>
          <Grid container spacing={3}>
@@ -32,13 +32,13 @@ export default function Dashboard() {
                     height: 240,
                   }}
                 >
-                  <Deposits />
+                  <Balance balance={props.balance} due={props.due} owe={props.owe}/>
                 </Paper>
               </Grid>
               {/* Recent RecentSharing */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <RecentSharing />
+                  <RecentSharing sharings={props.sharings} />
                 </Paper>
               </Grid>
             </Grid>

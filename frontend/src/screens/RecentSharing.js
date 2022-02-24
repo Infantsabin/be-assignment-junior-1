@@ -52,7 +52,7 @@ function preventDefault(event) {
   event.preventDefault();
 }
 
-export default function RecentSharing() {
+export default function RecentSharing(props) {
   return (
     <React.Fragment>
       <Title>Recent Sharing</Title>
@@ -61,19 +61,19 @@ export default function RecentSharing() {
           <TableRow>
             <TableCell>Date</TableCell>
             <TableCell>Name</TableCell>
-            <TableCell>Ship To</TableCell>
-            <TableCell>Payment Method</TableCell>
-            <TableCell align="right">Sale Amount</TableCell>
+            <TableCell>Paid By</TableCell>
+            <TableCell>Created By</TableCell>
+            <TableCell align="right">Total</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {props.sharings.map((row) => (
             <TableRow key={row.id}>
               <TableCell>{row.date}</TableCell>
               <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{`$${row.amount}`}</TableCell>
+              <TableCell>{row.paid_by}</TableCell>
+              <TableCell>{row.created_by}</TableCell>
+              <TableCell align="right">{`$${row.total}`}</TableCell>
             </TableRow>
           ))}
         </TableBody>

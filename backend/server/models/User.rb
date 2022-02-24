@@ -51,6 +51,7 @@ class User < Sequel::Model
 		
 		recent_sharings = self.expenses_dataset.collect do |expense|
 			{
+				id: expense[:id],
 				name: expense[:name],
 				description: expense[:description],
 				date: expense[:date],

@@ -16,7 +16,10 @@ const mdTheme = createTheme();
 function DashboardContent() {
   const navigate = useNavigate();
   const [name, setName] = useState("Rommie User");
-  const [cards, setCards] = useState([]);
+  const [balance, setBalance] = useState('0.00');
+  const [owe, setOwe] = useState("0.00");
+  const [due, setDue] = useState("0.00");
+  const [sharings, setSharings] = useState([]);
   const token = localStorage.getItem("token");
 
     useEffect(() => {
@@ -30,6 +33,10 @@ function DashboardContent() {
         .then((response) => {
           console.log(response.data)
           setName(response.data.values.name);
+          setOwe(response.data.values.due_amount);
+          setDue(response.data.values.owe_amount);
+          setBalance(response.data.values.total_balance);
+          setSharings(response.data.values.recent_sharings);
         })
         .catch((error) => {
           console.error("There was an error!", error);
@@ -56,7 +63,7 @@ function DashboardContent() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Dashboard />
+            <Dashboard balance={balance} due={due} owe={owe} sharings={sharings} />
             <AddExpensesForm />
             </Container>
             <Footer sx={{ pt: 4 }} />
