@@ -26,4 +26,13 @@ App.route('api/auth') do |r|
             }
         end
     end
+     r.on 'users-list' do 
+        r.get do 
+            ret = User.get_all_users
+            {
+                values: ret,
+                success: true
+            }
+        end
+    end
 end

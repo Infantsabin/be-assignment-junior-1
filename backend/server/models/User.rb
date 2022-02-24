@@ -35,6 +35,15 @@ class User < Sequel::Model
 		User.create(data)
 	end
 
+	def self.get_all_users
+		User.all.collect do |user|
+			{
+				id: user.id,
+				name: user.name,
+			}
+		end 
+	end
+
 	def dashboard_details
 
 		cur_user_id = self.id

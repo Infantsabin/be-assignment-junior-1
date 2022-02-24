@@ -41,4 +41,19 @@ class Expense < Sequel::Model
 					user_id: data[:created_by_id],
 					paid: true)
 	end
+
+	def self.get_user_expenses cur_user
+		Expense.where(:created_by_id => cur_user.id).collect do |expense|
+			{
+				name: expense[:name],
+				description: expense[:description],
+				date: expense[:date],
+				total: expense[:total].to_f,
+				created_by_id: expense[:created_by_id],
+				paid_by_id: expense[:paid_by_id],
+				created_by: expense.creator.name,
+				paid_by: expense.paid_by.name
+			}
+		end		
+	end
 end
