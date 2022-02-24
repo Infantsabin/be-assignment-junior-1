@@ -1,36 +1,78 @@
-# Rails Assignment - Splitwise
+<h1 align="center">Roomie - Expenses Spliter</h1>
 
-## Setup
-- Fork the repository. 
-- Clone the repository in your local machine.
-- Run `rails db:setup`, this will also seed data in the `User` model
-- Run `rails s` to start the server and `rails c` for rails console
+<p align="center">
+  <img alt="Github top language" src="https://img.shields.io/github/languages/top/infantsabin/shopie?color=56BEB8">
 
-## Requirements
+  <img alt="Github language count" src="https://img.shields.io/github/languages/count/infantsabin/shopie?color=56BEB8">
 
-- Ruby - 2.6.3
-- Rails - 6.1.4
-- Git (configured with your Github account)
-- Node - 12.13.1
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/infantsabin/shopie?color=56BEB8">
 
+  <img alt="License" src="https://img.shields.io/github/license/infantsabin/shopie?color=56BEB8">
 
-## Things available in the repo
-- Webpacker configured and following packages are added and working.
-  - Jquery
-  - Bootstrap
-  - Jgrowl
-- Devise installed and `User` model is added. Sign in and Sign up pages have been setup.
-- Routes and layouts for following page have been added.
-  - Dashboard - This will be the root page.
-  - Friend page - `/people/:id`
+  <!-- <img alt="Github issues" src="https://img.shields.io/github/issues/infantsabin/shopie?color=56BEB8" /> -->
 
+  <!-- <img alt="Github forks" src="https://img.shields.io/github/forks/infantsabin/shopie?color=56BEB8" /> -->
 
-## Submission
-- Make the improvements as specified in your technical assignment task.
-- Commit all changes to the fork you created
-- Deploy your app to Heroku
-- Send us the link of the dpeloyed application and your fork.
+  <!-- <img alt="Github stars" src="https://img.shields.io/github/stars/infantsabin/shopie?color=56BEB8" /> -->
+</p>
 
+<!-- Status -->
 
-## Contact us
-If you need any help regarding this assignment or want to join [Commutatus](https://www.commutatus.com/), drop us an email at work@commutatus.com 
+<!-- <h4 align="center">
+	🚧  Shopie - Ecommerce Site 🚀 Under construction...  🚧
+</h4>
+
+<hr> -->
+
+<p align="center">
+  <a href="#dart-about">About</a> &#xa0; | &#xa0; 
+  <a href="#rocket-technologies">Technologies</a> &#xa0; | &#xa0;
+  <a href="#checkered_flag-starting">Starting</a> &#xa0; | &#xa0;
+  <a href="https://github.com/infantsabin" target="_blank">Author</a>
+</p>
+
+<br>
+
+## :dart: About
+
+This project is about Expenses splitup using Ruby and ReactJs
+
+## :rocket: Technologies
+
+The following stacks were used in this project:
+
+- [Ruby](https://www.ruby-lang.org/)
+- [React](https://pt-br.reactjs.org/)
+
+## :checkered_flag: Starting
+
+```bash
+# Clone this project
+$ git clone https://github.com/Infantsabin/be-assignment-junior-1
+
+# Access
+$ cd be-assignment-junior-1
+
+# go to Backend and start server (9292 port)
+$ cd backend
+$ bundle install    #Install dependencies
+$ bundle exec rake db:migrate   #Run Migration
+$ bundle exec rake db:seed      #Run Seeds
+
+$ bundle exec puma  #Run backend server
+
+# go to Frontend and Install packages
+$ cd frontend
+$ npm install
+
+# Run the project
+$ npm start
+
+# The server will initialize in the <http://localhost:3000>
+```
+
+Made with :heart: by <a href="https://github.com/infantsabin" target="_blank">Infant Sabin</a>
+
+&#xa0;
+
+<a href="#top">Back to top</a>
