@@ -16,15 +16,6 @@ App.route('api/auth') do |r|
                 success: true
             }
         end
-
-        r.get do
-            ret = User.details @token
-
-            {
-                values: ret,
-                success: true
-            }
-        end
     end
     
     @user = User.where(token: @token).first
